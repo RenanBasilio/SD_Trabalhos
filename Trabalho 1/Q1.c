@@ -10,8 +10,7 @@ int main(int argc, char *argv[]) {
 		return 0;
 	}
 	if(kill(atoi(argv[1]),SIGHUP)){
-		printf("Error: Processo não existe.");
+		printf("Erro: O processo %s não existe.", argv[1]);
 	}
-	printf(argv[1]);
     return 0;  
 }
