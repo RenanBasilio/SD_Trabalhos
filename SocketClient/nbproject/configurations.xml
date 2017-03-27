@@ -36,6 +36,8 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <standard>11</standard>
+          <commandlineTool>g++</commandlineTool>
           <incDir>
             <pElem>.</pElem>
           </incDir>

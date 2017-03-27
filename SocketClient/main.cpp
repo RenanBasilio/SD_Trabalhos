@@ -27,6 +27,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
+#include <string>
 
 /*
  * 
@@ -35,28 +37,61 @@ int main(int argc, char** argv) {
 
     int socketHandle;
     
-    if ((socketHandle = socket(AF_INET, SOCK_STREAM, IPPROTO_IP)) < 0)
+    std::cout << "Initializing generic socket..." << std::endl;
+    if ((socketHandle = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         close(socketHandle);
         exit(EXIT_FAILURE);
     }
+    std::cout << "Socket initialized with handle " << socketHandle << std::endl;
     
+    std::cout << "Configuring socket as client type." << std::endl;
     struct sockaddr_in remoteSocketInfo;
-    struct hostent *hPtr;
-    std::string serverAddress = "127.0.0.1"; // Loopback
-    int portNumber = 9001;
+    const char * serverAddress = "127.0.0.1";
+    int portNumber = 9006;
     
     remoteSocketInfo.sin_family = AF_INET;
-    remoteSocketInfo.sin_addr.s_addr = inet_addr("127.0.0.1");
+    remoteSocketInfo.sin_addr.s_addr = inet_addr(serverAddress);
     remoteSocketInfo.sin_port = htons(portNumber);
     
-    if (connect(socketHandle, (struct sockaddr *) &remoteSocketInfo, sizeof(remoteSocketInfo)) < 0);
+    std::cout << "Attempting to connect to server." << std::endl;
+    if (connect(socketHandle, (struct sockaddr *) &remoteSocketInfo, sizeof(sockaddr_in)) < 0)
     {
         close(socketHandle);
-        std::cout << "Could not connect to server." << std::endl;
+        std::cout << "Could not connect to server at " << inet_ntoa(remoteSocketInfo.sin_addr) << ":" << portNumber << "(" << strerror(errno) << ")" << std::endl;
         exit(EXIT_FAILURE);
     }
-    std::cout << "Connected to server.";
+    std::cout << "Connected to server." << std::endl;
+    
+    int nrand = 0;
+    std::cout << "Enter number of random numbers to generate: " << std::endl;
+    std::cin >> nrand;
+    
+    int number = 0;
+    for (int i = 0; i < nrand; i++)
+    {
+        int rc = 0;
+        int buffSize = 20;
+        char outBuffer[buffSize];
+        char inBuffer[buffSize];
+        
+        number = rand()%100 + number;
+        
+        std::cout << "Generated " << number << ". ";
+        
+        std::string outstring = std::to_string(number);
+        strcpy(outBuffer, outstring.c_str());
+    
+        send(socketHandle, outBuffer, buffSize, 0);
+        
+        rc = recv(socketHandle, inBuffer, buffSize, MSG_WAITALL);
+        inBuffer[rc] = (char)NULL;
+        
+        std::cout << "Server response: " << inBuffer << std::endl;
+    }
+    char outBuffer[20];
+    strcpy(outBuffer, "0");
+    send(socketHandle, outBuffer, 20, 0);
     
     close(socketHandle);
     
