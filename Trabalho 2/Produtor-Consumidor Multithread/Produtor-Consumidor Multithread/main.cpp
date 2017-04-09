@@ -1,7 +1,6 @@
 // Produtor-Consumidor Multithread.cpp : Defines the entry point for the console application.
 //
 
-#include "stdafx.h"
 #include <iostream>
 
 // Prime verification
@@ -17,6 +16,7 @@
 #include <thread>
 #include <mutex>
 #include <condition_variable>
+#include <atomic>
 
 // Shared memory
 #include <vector>
@@ -30,13 +30,13 @@ int lastPosWritten;
 
 
 // Defines
-#define SHARED_MEMORY_SIZE 32
-#define PRODUCER_THREAD_COUNT 1
+#define SHARED_MEMORY_SIZE 2
+#define PRODUCER_THREAD_COUNT 16
 #define CONSUMER_THREAD_COUNT 1
 #define STOP_AFTER 10000
 
 // Globals
-int runCount = 0;
+std::atomic_int runCount = 0;
 bool stop = false;
 
 int produce()
@@ -45,10 +45,12 @@ int produce()
 	{
 		// Generate a random number
 		int number = (rand() % 10000000) + 1; // Random numbers in range [1, 10^7]
-											  // Create local lock manager
+		
+		// Create local lock manager. This also locks the mutex
 		std::unique_lock<std::mutex> lock(mutex);
-		// Wait until shared memory isn't full
+		// If memory is full, subscribe to condition variable
 		while (elementCount == sharedMemory.size() && !stop) notFull.wait(lock);
+
 		// If stop flag is raised, exit
 		if (stop)
 		{
@@ -68,8 +70,8 @@ int produce()
 		lastPosWritten = myPos;
 		elementCount++;
 
-		// If vector was empty, notify consumers
-		if (elementCount == 1) notEmpty.notify_all();
+		// Notify consumers of data in memory
+		notEmpty.notify_all();
 
 		//std::cout << "Produced value " << number << std::endl;
 
@@ -84,10 +86,18 @@ int consume()
 {
 	while (!stop && runCount <= STOP_AFTER)
 	{
-		// Create local lock manager
+
+		// Create local lock manager. This also locks the mutex.
 		std::unique_lock<std::mutex> lock(mutex);
 		// Wait until shared memory isn't empty
-		while (elementCount == 0) notEmpty.wait(lock);
+		while (elementCount == 0 && !stop) notEmpty.wait(lock);
+
+		// If stop flag is raised, exit
+		if (stop)
+		{
+			lock.unlock();
+			break;
+		}
 
 		// Once mutex is locked, check last position read. The next position should be filled since the array isnt empty
 		int myPos = lastPosRead + 1;
@@ -102,71 +112,96 @@ int consume()
 		lastPosRead = myPos;
 		elementCount--;
 
-		// If vector was full, notify producers
-		if (elementCount == sharedMemory.size()-1) notFull.notify_all();
+		// Notify producers of free space
+		notFull.notify_all();
 
 		//std::cout << "Processing value " << value << std::endl;
-
-		runCount++;
 
 		// Once done unlock the mutex
 		lock.unlock();
 
 		// Process value retrieved from array
 		bool prime = isPrime(value);
+
+		runCount++;
 	}
 
 	// Program is done, notify producers to exit
 	stop = true;
 	notFull.notify_all();
+	notEmpty.notify_all();
 
 	return 0;
 }
 
 int main()
 {
-	// Record program start time
-	std::clock_t startTime = clock();
+	std::clock_t startTimes[10];
+	std::clock_t endTimes[10];
+	int leftovers[10];
 
-	// Seed random number generator
-	srand(time(NULL)); 
-
-	// Initialize shared memory
-	sharedMemory.resize(SHARED_MEMORY_SIZE, 0);
-	elementCount = 0;
-	lastPosRead = -1;
-	lastPosWritten = -1;
-
-	// Initialize producer and consumer threads
-	std::vector<std::thread> producers(PRODUCER_THREAD_COUNT);
-	std::vector<std::thread> consumers(CONSUMER_THREAD_COUNT);
-	for (int i = 0; i < producers.size(); i++)
+	for (int i = 0; i < 10; i++)
 	{
-		producers[i] = std::thread(produce);
+		// Record program start time
+		startTimes[i] = clock();
+
+		// Seed random number generator
+		srand(time(NULL));
+
+		// Initialize shared memory
+		sharedMemory.resize(SHARED_MEMORY_SIZE, 0);
+		elementCount = 0;
+		lastPosRead = -1;
+		lastPosWritten = -1;
+
+		// Initialize producer and consumer threads
+		std::vector<std::thread> producers(PRODUCER_THREAD_COUNT);
+		std::vector<std::thread> consumers(CONSUMER_THREAD_COUNT);
+		for (int i = 0; i < producers.size(); i++)
+		{
+			producers[i] = std::thread(produce);
+		}
+		for (int i = 0; i < consumers.size(); i++)
+		{
+			consumers[i] = std::thread(consume);
+		}
+
+		// Signal start production
+		notFull.notify_all();
+
+		// Wait for producers to finish and join them as they do
+		for (int i = 0; i < producers.size(); i++)
+		{
+			producers[i].join();
+		}
+		// Wait for consumers to finish and join them as they do
+		for (int i = 0; i < consumers.size(); i++)
+		{
+			consumers[i].join();
+		}
+
+		// Reset global variables
+		runCount = 0;
+		stop = false;
+
+		// Record program end time
+		endTimes[i] = clock();
+		leftovers[i] = elementCount;
 	}
-	for (int i = 0; i < consumers.size(); i++)
+
+	double timeAvg = 0;
+	double leftoverAvg = 0;
+	
+	for (int i = 0; i < 10; i++)
 	{
-		consumers[i] = std::thread(consume);
+		timeAvg += (double)(endTimes[i] - startTimes[i]) / CLOCKS_PER_SEC;
+		leftoverAvg += leftovers[i];
 	}
+	timeAvg = timeAvg / 10;
+	leftoverAvg = leftoverAvg / 10;
 
-	// Signal start production
-	notFull.notify_all();
-
-	// Wait for producers to finish and join them as they do
-	for (int i = 0; i < producers.size(); i++)
-	{
-		producers[i].join();
-	}
-	// Wait for consumers to finish and join them as they do
-	for (int i = 0; i < consumers.size(); i++)
-	{
-		consumers[i].join();
-	}
-
-	// Record program end time
-	std::clock_t endTime = clock();
-
-	std::cout << "Done! Run time: " << (double)(endTime - startTime)/CLOCKS_PER_SEC << " s" << std::endl;
+	std::cout << "Done! Run time: " << timeAvg << " s" << std::endl;
+	std::cout << leftoverAvg << " values were left in shared memory ( size: " << SHARED_MEMORY_SIZE << " )" << std::endl;
 	getchar();
     return 0;
 }
