@@ -1,6 +1,6 @@
-# Trabalhos de Sistemas Digitais - COS470
+# Trabalhos de Sistemas Distribuídos - COS470
 
-Este repositório contém todos os trabalhos produzidos para a disciplina COS470 - Sistemas Digitais da UFRJ no período de 2017/1 ministrada pelo professor Daniel Ratton.
+Este repositório contém todos os trabalhos produzidos para a disciplina COS470 - Sistemas Distribuídos da UFRJ no período de 2017/1 ministrada pelo professor Daniel Ratton.
 
 Alunos: 
 Eduardo Araújo e Renan Basilio
