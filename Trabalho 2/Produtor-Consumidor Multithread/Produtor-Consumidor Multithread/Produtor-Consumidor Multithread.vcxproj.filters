@@ -21,15 +21,15 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="isPrime.h">
+    <ClInclude Include="..\..\..\Shared\isPrime.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="isPrime.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\..\..\Shared\isPrime.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
