@@ -4,7 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>isPrime.h</itemPath>
+      <itemPath>../../Shared/isPrime.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -13,7 +13,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>isPrime.cpp</itemPath>
+      <itemPath>../../Shared/isPrime.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -40,12 +40,13 @@
         <ccTool>
           <incDir>
             <pElem>.</pElem>
+            <pElem>../../Shared</pElem>
           </incDir>
         </ccTool>
       </compileType>
-      <item path="isPrime.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../Shared/isPrime.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="isPrime.h" ex="false" tool="3" flavor2="0">
+      <item path="../../Shared/isPrime.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -70,9 +71,9 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="isPrime.cpp" ex="false" tool="1" flavor2="0">
+      <item path="../../Shared/isPrime.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="isPrime.h" ex="false" tool="3" flavor2="0">
+      <item path="../../Shared/isPrime.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
