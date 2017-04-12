@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
  
 
 void acquire(struct sum_blocking *v) { 
-    while(&v->held.test_and_set()))
+    while(v->held.test_and_set())
         ;
 } 
 
