@@ -5,10 +5,10 @@
 #include <vector> 
 #include <iostream>
 #include <sys/time.h>
+#include <atomic>
 
 using namespace std; 
  
-bool test_and_set(bool *flag); 
 void acquire(struct sum_blocking *v) ; 
 void release(struct sum_blocking *v); 
 void *sumThread(void *tmp); 
@@ -16,7 +16,7 @@ void *sumThread(void *tmp);
 // Struct para armazenar a soma total e o booleano de bloqueio da regiao critica
 struct sum_blocking{ 
 	int sum; 
-	bool held; 
+	atomic_flag held; 
 }; 
  
 //struct com os argumentos que serao passados para a thread
@@ -79,19 +79,14 @@ int main(int argc, char *argv[]){
 	return 0;
 } 
  
-bool test_and_set(bool *flag) { 
-    bool previous = *flag; 
-    *flag = true; 
-    return previous; 
-} 
 
 void acquire(struct sum_blocking *v) { 
-    while(test_and_set(&v->held))
+    while(&v->held.test_and_set()))
         ;
 } 
 
 void release(struct sum_blocking *v) { 
-    v->held = 0; 
+    v->held.clear(); 
 } 
  
 void *sumThread(void *args){ 
