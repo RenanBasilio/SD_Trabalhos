@@ -134,8 +134,16 @@ int consume()
 	return 0;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+	if (argc != 3) {
+		printf("Modo de utilizacao: programa nProdutores nConsumidores");
+		return -1;
+	}
+
+	int nProducers = atoi(argv[1]);
+	int nConsumers = atoi(argv[2]);
+
 	std::clock_t startTimes[10];
 	std::clock_t endTimes[10];
 	int leftovers[10];
@@ -155,8 +163,8 @@ int main()
 		lastPosWritten = -1;
 
 		// Initialize producer and consumer threads
-		std::vector<std::thread> producers(PRODUCER_THREAD_COUNT);
-		std::vector<std::thread> consumers(CONSUMER_THREAD_COUNT);
+		std::vector<std::thread> producers(nProducers);
+		std::vector<std::thread> consumers(nConsumers);
 		for (int i = 0; i < producers.size(); i++)
 		{
 			producers[i] = std::thread(produce);
@@ -202,6 +210,7 @@ int main()
 
 	std::cout << "Done! Run time: " << timeAvg << " s" << std::endl;
 	std::cout << leftoverAvg << " values were left in shared memory ( size: " << SHARED_MEMORY_SIZE << " )" << std::endl;
+	std::cout << "[Press Enter to exit]";
 	getchar();
     return 0;
 }
