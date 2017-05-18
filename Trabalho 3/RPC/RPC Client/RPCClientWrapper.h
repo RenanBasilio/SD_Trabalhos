@@ -21,6 +21,8 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <vector>
+#include <typeinfo>
 #include <xmlrpc-c/base.h>
 #include <xmlrpc-c/client.h>
 #include <xmlrpc-c/util.h>
@@ -30,12 +32,26 @@ class RPCClientWrapper {
 public:
     RPCClientWrapper(const char* serverURL);
     ~RPCClientWrapper();
-    void ExecCall(std::string methodName);
-    //int ExecCall(std::string methodName, ...);
+    xmlrpc_value* RPCall(std::string methodName, std::vector<xmlrpc_value*> args);
+    
+    std::vector<xmlrpc_value*>  ConvertArray(std::vector<int> inVector);
+    
+    void Parse(xmlrpc_value * xmlValue, int* returnVar);
+    void Parse(xmlrpc_value * xmlValue, double* returnVar);
+    int ParseToInt(xmlrpc_value * xmlValue);
+    
+    template<typename T,typename U> void ExecRPC(std::string methodName, std::vector<T> args, U* returnVar)
+    {
+        std::vector<xmlrpc_value*> rpcArgs = ConvertArray(args);
+        xmlrpc_value* retVal = RPCall(methodName, rpcArgs);
+        Parse(retVal, returnVar);
+    };
 private:
     /* Initialize RPC Client*/
     xmlrpc_env env;
     xmlrpc_client * clientP;
+    xmlrpc_server_info * serverInfoP;
+    
     const char * url;
     
     void die_if_fault_occurred ();
@@ -43,4 +59,3 @@ private:
 };
 
 #endif /* RPCCLIENTWRAPPER_H */
-

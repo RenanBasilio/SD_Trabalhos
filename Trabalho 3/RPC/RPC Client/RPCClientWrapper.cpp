@@ -13,10 +13,9 @@
 
 #include "RPCClientWrapper.h"
 
-
 RPCClientWrapper::RPCClientWrapper(const char* serverURL) {
     /* Initialize our error-handling environment. */
-    url = serverURL;
+    serverInfoP = xmlrpc_server_info_new(&env, serverURL);
     
     xmlrpc_env_init(&env);
 
@@ -31,6 +30,8 @@ RPCClientWrapper::~RPCClientWrapper() {
     xmlrpc_env_clean(&env);
     
     xmlrpc_client_destroy(clientP);
+    
+    xmlrpc_server_info_free(serverInfoP);
 
     xmlrpc_client_teardown_global_const();
 }
@@ -44,21 +45,29 @@ void RPCClientWrapper::die_if_fault_occurred()
     }
 }
 
-void RPCClientWrapper::ExecCall(std::string methodName)
+// Executes RPC call on the current server and returns the unparsed xml string
+xmlrpc_value* RPCClientWrapper::RPCall(std::string methodName, std::vector<xmlrpc_value*> args)
 {
-    int sum;
+    xmlrpc_value * vars = xmlrpc_array_new(&env);
     xmlrpc_value * resultP;
     
+    /* Parse Variables into Vars Array*/
+    for(int i = 0; i < args.size(); i++) xmlrpc_array_append_item(&env, vars, args[i]);
+    
     /* Make the remote procedure call */
-    xmlrpc_client_call2f(&env, clientP, url, methodName.c_str(), &resultP, "(ii)", (xmlrpc_int32) 5, (xmlrpc_int32) 7);
+    xmlrpc_client_call2(&env, clientP, serverInfoP, methodName.c_str(), vars, &resultP);
     die_if_fault_occurred();
     
-    /* Get our sum and print it out. */
-    xmlrpc_read_int(&env, resultP, &sum);
-    die_if_fault_occurred();
-    std::cout << "The sum is " << sum << std::endl;
-    
-    /* Dispose of our result value. */
-    xmlrpc_DECREF(resultP);
+    return resultP;
+
 }
 
+/*
+template<typename T,typename U>
+void RPCClientWrapper::ExecRPC(std::string methodName, std::vector<T> args, U* returnVar)
+{
+    std::vector<xmlrpc_value*> rpcArgs = ConvertArray(args);
+    xmlrpc_value* retVal = RPCall(methodName, args);
+    returnVar = Parse(retVal, returnVar);
+}
+*/

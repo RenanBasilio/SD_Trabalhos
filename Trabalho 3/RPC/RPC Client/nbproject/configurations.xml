@@ -13,6 +13,8 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>ClientWrapperArrayConverters.cpp</itemPath>
+      <itemPath>ClientWrapperParsers.cpp</itemPath>
       <itemPath>RPCClientWrapper.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
@@ -53,6 +55,10 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="ClientWrapperArrayConverters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ClientWrapperParsers.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="RPCClientWrapper.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RPCClientWrapper.h" ex="false" tool="3" flavor2="0">
@@ -80,6 +86,10 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="ClientWrapperArrayConverters.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="ClientWrapperParsers.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="RPCClientWrapper.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RPCClientWrapper.h" ex="false" tool="3" flavor2="0">

@@ -26,8 +26,21 @@ int main(int const argc, const char ** const argv) {
     RPCClientWrapper* testClient = new RPCClientWrapper(SERVER_ADDR);
 
     std::string methodName = "sample.add";
+    std::vector<int> preArgs;
+    preArgs.push_back(5);
+    preArgs.push_back(7);
     
-    testClient->ExecCall(methodName);
+    //xmlrpc_value * resultP = testClient->RPCall(methodName, testClient->ConvertArray(preArgs));
+    //int sum;
+    //testClient->Parse(resultP, &sum);
+    
+    int sum;
+    testClient->ExecRPC(methodName, preArgs, &sum);
+    
+    std::cout << "The sum is " << sum << std::endl;
+    
+    /* Dispose of our result value. */
+    //xmlrpc_DECREF(resultP);
     
     delete testClient;
 

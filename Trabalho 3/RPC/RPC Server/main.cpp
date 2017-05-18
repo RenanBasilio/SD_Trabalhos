@@ -19,11 +19,14 @@
 
 
 static xmlrpc_value * sample_add(xmlrpc_env *   const envP, xmlrpc_value * const paramArrayP, void * const serverContext, void * const callInfo) {
-
+    
     xmlrpc_int32 x, y, z;
 
     /* Parse our argument array. */
     xmlrpc_parse_value(envP, paramArrayP, "(ii)", &x, &y);
+    
+    std::cout << "Received values: " << x << " " << y << std::endl;
+    
     if (envP->fault_occurred) return NULL;
 
     /* Add our two numbers. */
