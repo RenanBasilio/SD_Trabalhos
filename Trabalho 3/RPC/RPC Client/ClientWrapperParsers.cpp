@@ -1,19 +1,19 @@
 
 #include "RPCClientWrapper.h"
 
-void RPCClientWrapper::Parse(xmlrpc_value* xmlValue, int* returnVar)
+void RPCClientWrapper::Parse(const xmlrpc_value* xmlValue, int* returnVar)
 {
     xmlrpc_read_int(&env, xmlValue, returnVar);
     die_if_fault_occurred();
 }
 
-void RPCClientWrapper::Parse(xmlrpc_value* xmlValue, double* returnVar)
+void RPCClientWrapper::Parse(const xmlrpc_value* xmlValue, double* returnVar)
 {
     xmlrpc_read_double(&env, xmlValue, returnVar);
     die_if_fault_occurred();
 }
 
-int RPCClientWrapper::ParseToInt(xmlrpc_value* xmlValue)
+int RPCClientWrapper::ParseToInt(const xmlrpc_value* xmlValue)
 {
     int value;
     

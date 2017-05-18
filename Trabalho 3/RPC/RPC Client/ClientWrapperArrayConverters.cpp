@@ -1,7 +1,7 @@
 
 #include "RPCClientWrapper.h"
 
-std::vector<xmlrpc_value*> RPCClientWrapper::ConvertArray(std::vector<int> inVector)
+std::vector<xmlrpc_value*> RPCClientWrapper::ConvertArray(const std::vector<int> & inVector)
 {
     std::vector<xmlrpc_value*> values(inVector.size());
     for(int i = 0; i < inVector.size(); i++)

@@ -46,7 +46,7 @@ void RPCClientWrapper::die_if_fault_occurred()
 }
 
 // Executes RPC call on the current server and returns the unparsed xml string
-xmlrpc_value* RPCClientWrapper::RPCall(std::string methodName, std::vector<xmlrpc_value*> args)
+xmlrpc_value* RPCClientWrapper::RPCall(const std::string methodName, const std::vector<xmlrpc_value*> & args)
 {
     xmlrpc_value * vars = xmlrpc_array_new(&env);
     xmlrpc_value * resultP;
@@ -57,6 +57,8 @@ xmlrpc_value* RPCClientWrapper::RPCall(std::string methodName, std::vector<xmlrp
     /* Make the remote procedure call */
     xmlrpc_client_call2(&env, clientP, serverInfoP, methodName.c_str(), vars, &resultP);
     die_if_fault_occurred();
+    
+    xmlrpc_DECREF(vars);
     
     return resultP;
 

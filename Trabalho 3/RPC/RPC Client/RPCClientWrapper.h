@@ -32,19 +32,20 @@ class RPCClientWrapper {
 public:
     RPCClientWrapper(const char* serverURL);
     ~RPCClientWrapper();
-    xmlrpc_value* RPCall(std::string methodName, std::vector<xmlrpc_value*> args);
+    xmlrpc_value* RPCall(const std::string methodName, const std::vector<xmlrpc_value*> & args);
     
-    std::vector<xmlrpc_value*>  ConvertArray(std::vector<int> inVector);
+    std::vector<xmlrpc_value*>  ConvertArray(const std::vector<int> & inVector);
     
-    void Parse(xmlrpc_value * xmlValue, int* returnVar);
-    void Parse(xmlrpc_value * xmlValue, double* returnVar);
-    int ParseToInt(xmlrpc_value * xmlValue);
+    void Parse(const xmlrpc_value * xmlValue, int* returnVar);
+    void Parse(const xmlrpc_value * xmlValue, double* returnVar);
+    int ParseToInt(const xmlrpc_value * xmlValue);
     
     template<typename T,typename U> void ExecRPC(std::string methodName, std::vector<T> args, U* returnVar)
     {
         std::vector<xmlrpc_value*> rpcArgs = ConvertArray(args);
-        xmlrpc_value* retVal = RPCall(methodName, rpcArgs);
-        Parse(retVal, returnVar);
+        xmlrpc_value* callResult = RPCall(methodName, rpcArgs);
+        Parse(callResult, returnVar);
+        xmlrpc_DECREF(callResult);
     };
 private:
     /* Initialize RPC Client*/
