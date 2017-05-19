@@ -34,19 +34,48 @@ public:
     ~RPCClientWrapper();
     xmlrpc_value* RPCall(const std::string methodName, const std::vector<xmlrpc_value*> & args);
     
-    std::vector<xmlrpc_value*>  ConvertArray(const std::vector<int> & inVector);
-    
     void Parse(const xmlrpc_value * xmlValue, int* returnVar);
     void Parse(const xmlrpc_value * xmlValue, double* returnVar);
+    
     int ParseToInt(const xmlrpc_value * xmlValue);
     
-    template<typename T,typename U> void ExecRPC(std::string methodName, std::vector<T> args, U* returnVar)
+    template <typename T> void Parse(const xmlrpc_value* xmlValue, std::vector<T>* returnVar)
     {
-        std::vector<xmlrpc_value*> rpcArgs = ConvertArray(args);
+        for(int i = 0; i < xmlrpc_array_size(&env, xmlValue); i++)
+        {
+            xmlrpc_value* element;
+            T parsedElement;
+            xmlrpc_array_read_item(&env, xmlValue, i, &element);
+            Parse(element, &parsedElement);
+            returnVar->push_back(parsedElement);
+        }
+    };
+    
+    template<typename T> std::vector<xmlrpc_value*>  ConvertArray(const std::vector<T> &inVector, const int startPos = 0, const int blockSize = -1)
+    {
+        int stopPos;
+        if (blockSize == -1) stopPos = inVector.size();
+        else stopPos = startPos + blockSize;
+        
+        std::vector<xmlrpc_value*> values(inVector.size());
+        for(int i = startPos; i < stopPos; i++)
+        {
+            values[i] = xmlrpc_double_new(&env, (double)inVector[i]);
+            die_if_fault_occurred();
+        }
+        return values;
+    }
+    
+    template<typename T,typename U> int ExecRPC(std::string methodName, U* returnVar, std::vector<T> &args, const int arrayStartPos = 0, const int arrayBlockSize = -1)
+    {
+        std::vector<xmlrpc_value*> rpcArgs = ConvertArray(args, arrayStartPos, arrayBlockSize);
         xmlrpc_value* callResult = RPCall(methodName, rpcArgs);
         Parse(callResult, returnVar);
         xmlrpc_DECREF(callResult);
+        return 0;
     };
+
+
 private:
     /* Initialize RPC Client*/
     xmlrpc_env env;

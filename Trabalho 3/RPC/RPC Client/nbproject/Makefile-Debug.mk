@@ -35,7 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/ClientWrapperArrayConverters.o \
 	${OBJECTDIR}/ClientWrapperParsers.o \
 	${OBJECTDIR}/RPCClientWrapper.o \
 	${OBJECTDIR}/main.o
@@ -55,7 +54,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-lxmlrpc -lxmlrpc_util -lxmlrpc_xmlparse -lxmlrpc_xmltok -lxmlrpc_client
+LDLIBSOPTIONS=-lxmlrpc -lxmlrpc_util -lxmlrpc_xmlparse -lxmlrpc_xmltok -lxmlrpc_client -lpthread
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -65,25 +64,20 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/rpc_client: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/rpc_client ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/ClientWrapperArrayConverters.o: ClientWrapperArrayConverters.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/xmlrpc-c -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ClientWrapperArrayConverters.o ClientWrapperArrayConverters.cpp
-
 ${OBJECTDIR}/ClientWrapperParsers.o: ClientWrapperParsers.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/xmlrpc-c -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ClientWrapperParsers.o ClientWrapperParsers.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/xmlrpc-c -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ClientWrapperParsers.o ClientWrapperParsers.cpp
 
 ${OBJECTDIR}/RPCClientWrapper.o: RPCClientWrapper.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/xmlrpc-c -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RPCClientWrapper.o RPCClientWrapper.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/xmlrpc-c -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RPCClientWrapper.o RPCClientWrapper.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I/usr/local/include/xmlrpc-c -I. -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I/usr/local/include/xmlrpc-c -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

@@ -13,7 +13,6 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>ClientWrapperArrayConverters.cpp</itemPath>
       <itemPath>ClientWrapperParsers.cpp</itemPath>
       <itemPath>RPCClientWrapper.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
@@ -40,6 +39,7 @@
       </toolsSet>
       <compileType>
         <ccTool>
+          <standard>8</standard>
           <incDir>
             <pElem>/usr/local/include/xmlrpc-c</pElem>
             <pElem>.</pElem>
@@ -52,11 +52,10 @@
             <linkerLibLibItem>xmlrpc_xmlparse</linkerLibLibItem>
             <linkerLibLibItem>xmlrpc_xmltok</linkerLibLibItem>
             <linkerLibLibItem>xmlrpc_client</linkerLibLibItem>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="ClientWrapperArrayConverters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="ClientWrapperParsers.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RPCClientWrapper.cpp" ex="false" tool="1" flavor2="0">
@@ -86,8 +85,6 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
-      <item path="ClientWrapperArrayConverters.cpp" ex="false" tool="1" flavor2="0">
-      </item>
       <item path="ClientWrapperParsers.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RPCClientWrapper.cpp" ex="false" tool="1" flavor2="0">

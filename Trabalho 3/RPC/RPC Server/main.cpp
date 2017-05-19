@@ -14,37 +14,31 @@
 #include <cstdlib>
 #include <iostream>
 #include "RPCServerWrapper.h"
+#include "Type1RemoteMethods.h"
+#include "Type2RemoteMethods.h"
+#include "OtherRemoteMethods.h"
 
 #define LISTEN_PORT 8080
 
 
-static xmlrpc_value * sample_add(xmlrpc_env *   const envP, xmlrpc_value * const paramArrayP, void * const serverContext, void * const callInfo) {
-    
-    xmlrpc_int32 x, y, z;
-
-    /* Parse our argument array. */
-    xmlrpc_parse_value(envP, paramArrayP, "(ii)", &x, &y);
-    
-    std::cout << "Received values: " << x << " " << y << std::endl;
-    
-    if (envP->fault_occurred) return NULL;
-
-    /* Add our two numbers. */
-    z = x + y;
-
-    /* Return our result. */
-    return xmlrpc_build_value(envP, "i", z);
-}
-
-
-
 int main (int const argc, const char ** const argv) {
 
-    RPCServerWrapper* testServer = new RPCServerWrapper(LISTEN_PORT);
+    RPCServerWrapper* rpcServer = new RPCServerWrapper(LISTEN_PORT);
     
-    testServer->RegisterMethod("sample.add", &sample_add);
+    // Register other methods
+    rpcServer->RegisterMethod("simple.add", &simple_add);
+    
+    // Register type 1 methods
+    rpcServer->RegisterMethod("array.increment", &array_increment);
+    rpcServer->RegisterMethod("array.pow", &array_pow);
+    rpcServer->RegisterMethod("array.logn", &array_logn);
+    
+    // Register type 2 methods
+    rpcServer->RegisterMethod("array.sum", &array_sum);
+    rpcServer->RegisterMethod("array.avg", &array_avg);
+    rpcServer->RegisterMethod("array.count>", &array_countBigger);
 
-    testServer->Start();
+    rpcServer->Start();
     
     return 0;
 }

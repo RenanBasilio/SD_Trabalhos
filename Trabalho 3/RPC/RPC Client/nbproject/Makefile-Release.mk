@@ -35,7 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/ClientWrapperArrayConverters.o \
 	${OBJECTDIR}/ClientWrapperParsers.o \
 	${OBJECTDIR}/RPCClientWrapper.o \
 	${OBJECTDIR}/main.o
@@ -64,11 +63,6 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/rpc_client: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/rpc_client ${OBJECTFILES} ${LDLIBSOPTIONS}
-
-${OBJECTDIR}/ClientWrapperArrayConverters.o: ClientWrapperArrayConverters.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ClientWrapperArrayConverters.o ClientWrapperArrayConverters.cpp
 
 ${OBJECTDIR}/ClientWrapperParsers.o: ClientWrapperParsers.cpp 
 	${MKDIR} -p ${OBJECTDIR}

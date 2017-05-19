@@ -4,7 +4,10 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>OtherRemoteMethods.h</itemPath>
       <itemPath>RPCServerWrapper.h</itemPath>
+      <itemPath>Type1RemoteMethods.h</itemPath>
+      <itemPath>Type2RemoteMethods.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -54,9 +57,15 @@
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="OtherRemoteMethods.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="RPCServerWrapper.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RPCServerWrapper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Type1RemoteMethods.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Type2RemoteMethods.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -81,9 +90,15 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="OtherRemoteMethods.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="RPCServerWrapper.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="RPCServerWrapper.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Type1RemoteMethods.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Type2RemoteMethods.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
