@@ -86,7 +86,7 @@ static xmlrpc_value * array_countBigger(xmlrpc_env * const envP, xmlrpc_value * 
     xmlrpc_array_read_item(envP, paramArrayP, 0, &firstItem);
     xmlrpc_read_double(envP, firstItem, &refValue);
     //std::cout << refValue << "; Elements = [";
-    int count = 0;
+    double count = 0;
     
     for(int i = 1; i < xmlrpc_array_size(envP, paramArrayP); i++)
     {
@@ -99,7 +99,7 @@ static xmlrpc_value * array_countBigger(xmlrpc_env * const envP, xmlrpc_value * 
     }
     //std::cout << "] Count = " << count << std::endl;
     
-    xmlrpc_value* retValue = xmlrpc_int_new(envP, count);
+    xmlrpc_value* retValue = xmlrpc_double_new(envP, count);
     
     return retValue;
 }

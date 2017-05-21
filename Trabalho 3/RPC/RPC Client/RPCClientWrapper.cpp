@@ -46,13 +46,13 @@ void RPCClientWrapper::die_if_fault_occurred()
 }
 
 // Executes RPC call on the current server and returns the unparsed xml string
-xmlrpc_value* RPCClientWrapper::RPCall(const std::string methodName, const std::vector<xmlrpc_value*> & args)
+xmlrpc_value* RPCClientWrapper::RPCall(const std::string methodName, const std::vector<xmlrpc_value*> & data)
 {
     xmlrpc_value * vars = xmlrpc_array_new(&env);
     xmlrpc_value * resultP;
     
     /* Parse Variables into Vars Array*/
-    for(int i = 0; i < args.size(); i++) xmlrpc_array_append_item(&env, vars, args[i]);
+    for(int i = 0; i < data.size(); i++) xmlrpc_array_append_item(&env, vars, data[i]);
     
     /* Make the remote procedure call */
     xmlrpc_client_call2(&env, clientP, serverInfoP, methodName.c_str(), vars, &resultP);
@@ -64,12 +64,28 @@ xmlrpc_value* RPCClientWrapper::RPCall(const std::string methodName, const std::
 
 }
 
-/*
-template<typename T,typename U>
-void RPCClientWrapper::ExecRPC(std::string methodName, std::vector<T> args, U* returnVar)
+// Executes RPC call on the current server and returns the unparsed xml string
+xmlrpc_value* RPCClientWrapper::RPCall(
+    const std::string methodName, 
+    const std::vector<xmlrpc_value*> & data, 
+    const std::vector<double> &args)
 {
-    std::vector<xmlrpc_value*> rpcArgs = ConvertArray(args);
-    xmlrpc_value* retVal = RPCall(methodName, args);
-    returnVar = Parse(retVal, returnVar);
+    xmlrpc_value * vars = xmlrpc_array_new(&env);
+    xmlrpc_value * resultP;
+    
+    /* Parse Variables into Vars Array*/
+    for(int i = 0; i < args.size(); i++) 
+    {
+        xmlrpc_array_append_item(&env, vars, xmlrpc_double_new(&env, args[i]));
+    }
+    for(int i = 0; i < data.size(); i++) xmlrpc_array_append_item(&env, vars, data[i]);
+    
+    /* Make the remote procedure call */
+    xmlrpc_client_call2(&env, clientP, serverInfoP, methodName.c_str(), vars, &resultP);
+    die_if_fault_occurred();
+    
+    xmlrpc_DECREF(vars);
+    
+    return resultP;
+
 }
-*/
