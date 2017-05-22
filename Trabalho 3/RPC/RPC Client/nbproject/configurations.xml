@@ -77,6 +77,11 @@
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <standard>8</standard>
+          <incDir>
+            <pElem>/usr/local/include/xmlrpc-c</pElem>
+            <pElem>.</pElem>
+          </incDir>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>
@@ -84,6 +89,16 @@
         <asmTool>
           <developmentMode>5</developmentMode>
         </asmTool>
+        <linkerTool>
+          <linkerLibItems>
+            <linkerLibLibItem>xmlrpc</linkerLibLibItem>
+            <linkerLibLibItem>xmlrpc_util</linkerLibLibItem>
+            <linkerLibLibItem>xmlrpc_xmlparse</linkerLibLibItem>
+            <linkerLibLibItem>xmlrpc_xmltok</linkerLibLibItem>
+            <linkerLibLibItem>xmlrpc_client</linkerLibLibItem>
+            <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
+          </linkerLibItems>
+        </linkerTool>
       </compileType>
       <item path="ClientWrapperParsers.cpp" ex="false" tool="1" flavor2="0">
       </item>

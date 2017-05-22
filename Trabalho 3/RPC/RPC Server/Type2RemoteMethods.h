@@ -26,7 +26,7 @@
  */
 static xmlrpc_value * array_sum(xmlrpc_env * const envP, xmlrpc_value * const paramArrayP, void * const serverContext, void * const callInfo)
 {
-    //std::cout << "Received an array to add. Elements = [";
+    //std::cout << "Received an array to add." << std::endl;
     
     double sum = 0.0;
     
@@ -38,10 +38,13 @@ static xmlrpc_value * array_sum(xmlrpc_env * const envP, xmlrpc_value * const pa
         xmlrpc_read_double(envP, element, &elementDouble);
         //std::cout << elementDouble << ", ";
         sum += elementDouble;
+        xmlrpc_DECREF(element);
     }
     //std::cout << "] Sum = " << sum << std::endl;
     
     xmlrpc_value* retValue = xmlrpc_double_new(envP, sum);
+    
+    //std::cout << "Returned." << std::endl;
     
     return retValue;
 }
@@ -64,6 +67,7 @@ static xmlrpc_value * array_avg(xmlrpc_env * const envP, xmlrpc_value * const pa
         xmlrpc_read_double(envP, element, &elementDouble);
         //std::cout << elementDouble << ", ";
         average += elementDouble;
+        xmlrpc_DECREF(element);
     }
     average = average/arraySize;
     //std::cout << "] Average = " << average << std::endl;
@@ -85,6 +89,7 @@ static xmlrpc_value * array_countBigger(xmlrpc_env * const envP, xmlrpc_value * 
     xmlrpc_double refValue;
     xmlrpc_array_read_item(envP, paramArrayP, 0, &firstItem);
     xmlrpc_read_double(envP, firstItem, &refValue);
+    xmlrpc_DECREF(firstItem);
     //std::cout << refValue << "; Elements = [";
     double count = 0;
     
@@ -96,6 +101,7 @@ static xmlrpc_value * array_countBigger(xmlrpc_env * const envP, xmlrpc_value * 
         xmlrpc_read_double(envP, element, &elementDouble);
         //std::cout << elementDouble << ", ";
         if(elementDouble > refValue) count++;
+        xmlrpc_DECREF(element);
     }
     //std::cout << "] Count = " << count << std::endl;
     

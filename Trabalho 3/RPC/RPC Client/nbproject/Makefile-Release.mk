@@ -54,7 +54,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=
+LDLIBSOPTIONS=-lxmlrpc -lxmlrpc_util -lxmlrpc_xmlparse -lxmlrpc_xmltok -lxmlrpc_client -lpthread
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -67,17 +67,17 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/rpc_client: ${OBJECTFILES}
 ${OBJECTDIR}/ClientWrapperParsers.o: ClientWrapperParsers.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ClientWrapperParsers.o ClientWrapperParsers.cpp
+	$(COMPILE.cc) -O2 -I/usr/local/include/xmlrpc-c -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/ClientWrapperParsers.o ClientWrapperParsers.cpp
 
 ${OBJECTDIR}/RPCClientWrapper.o: RPCClientWrapper.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RPCClientWrapper.o RPCClientWrapper.cpp
+	$(COMPILE.cc) -O2 -I/usr/local/include/xmlrpc-c -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/RPCClientWrapper.o RPCClientWrapper.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -O2 -I/usr/local/include/xmlrpc-c -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:

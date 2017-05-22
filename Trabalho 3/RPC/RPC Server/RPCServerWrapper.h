@@ -40,6 +40,8 @@ private:
     xmlrpc_registry * registryP;
     xmlrpc_env env;
     int methodCount;
+    
+    void die_if_fault_occurred ();
 
 };
 

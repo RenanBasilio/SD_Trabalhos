@@ -27,6 +27,15 @@ RPCServerWrapper::~RPCServerWrapper()
     
 }
 
+void RPCServerWrapper::die_if_fault_occurred()
+{
+    /* Check our error-handling environment for an XML-RPC fault. */
+    if (env.fault_occurred) {
+        std::cerr << "XML-RPC Fault: " << env.fault_string << " " << env.fault_code << std::endl; 
+        exit(1);
+    }
+}
+
 int RPCServerWrapper::RegisterMethod(std::string mName, const xmlrpc_method2 method)
 {
     struct xmlrpc_method_info3 const methodInfo = {
@@ -34,6 +43,7 @@ int RPCServerWrapper::RegisterMethod(std::string mName, const xmlrpc_method2 met
         .methodFunction = method,
     };
     xmlrpc_registry_add_method3(&env, registryP, &methodInfo);
+    die_if_fault_occurred();
     
     methodCount++;
     std::cout << "Registered method " << mName << " with server." << std::endl;
@@ -53,6 +63,7 @@ int RPCServerWrapper::Start()
     
     serverparm.registryP = registryP;
     xmlrpc_server_abyss(&env, &serverparm, XMLRPC_APSIZE(registryP));
+    die_if_fault_occurred();
     
     std::cout << "Server Exited." << std::endl;
     

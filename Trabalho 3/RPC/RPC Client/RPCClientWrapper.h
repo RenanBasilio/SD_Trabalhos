@@ -59,6 +59,7 @@ public:
             die_if_fault_occurred();
             Parse(element, &parsedElement);
             returnVar->push_back(parsedElement);
+            xmlrpc_DECREF(element);
         }
     };
     
@@ -96,12 +97,12 @@ public:
         std::vector<xmlrpc_value*> rpcArgs = ConvertArray(data, arrayStartPos, arrayBlockSize);
         
         xmlrpc_value* callResult;
-        if(argCount > 0)   
+        if(argCount > 0)
         {
             va_list exArgs;
             va_start(exArgs, argCount);
             std::vector<double> args(argCount);
-            for(int i = 0; i < argCount; i++) args[i] = va_arg(exArgs, double);
+            for(int i = 0; i < argCount; i++) args[i] = (double)va_arg(exArgs, int);
             va_end(exArgs);
             
             callResult = RPCall(methodName, rpcArgs, args);
@@ -109,6 +110,7 @@ public:
         else callResult = RPCall(methodName, rpcArgs);
         
         for(int i = 0; i < rpcArgs.size(); i++) xmlrpc_DECREF(rpcArgs[i]);
+        
         Parse(callResult, returnVar);
         xmlrpc_DECREF(callResult);
         return 0;

@@ -34,6 +34,7 @@ static xmlrpc_value * array_increment(xmlrpc_env * const envP, xmlrpc_value * co
     xmlrpc_double incrementAmount;
     xmlrpc_array_read_item(envP, paramArrayP, 0, &firstItem);
     xmlrpc_read_double(envP, firstItem, &incrementAmount);
+    xmlrpc_DECREF(firstItem);
     //std::cout << incrementAmount << "; Elements = [";
     
     xmlrpc_value * returnArray = xmlrpc_array_new(envP);
@@ -44,15 +45,18 @@ static xmlrpc_value * array_increment(xmlrpc_env * const envP, xmlrpc_value * co
         xmlrpc_double elementDouble;
         xmlrpc_array_read_item(envP, paramArrayP, i, &element);
         xmlrpc_read_double(envP, element, &elementDouble);
+        xmlrpc_DECREF(element);
         //std::cout << elementDouble << " (";
         elementDouble = elementDouble + incrementAmount;
         
         element = xmlrpc_double_new(envP, elementDouble);
         xmlrpc_array_append_item(envP, returnArray, element);
+        xmlrpc_DECREF(element);
         
         //std::cout << elementDouble << "), ";
         
     }
+    
     //std::cout << "]" << std::endl;
     return returnArray;
 }
@@ -68,6 +72,7 @@ static xmlrpc_value * array_pow(xmlrpc_env * const envP, xmlrpc_value * const pa
     xmlrpc_double power;
     xmlrpc_array_read_item(envP, paramArrayP, 0, &firstItem);
     xmlrpc_read_double(envP, firstItem, &power);
+    xmlrpc_DECREF(firstItem);
     //std::cout << power << "; Elements = [";
     
     xmlrpc_value * returnArray = xmlrpc_array_new(envP);
@@ -78,11 +83,13 @@ static xmlrpc_value * array_pow(xmlrpc_env * const envP, xmlrpc_value * const pa
         xmlrpc_double elementDouble;
         xmlrpc_array_read_item(envP, paramArrayP, i, &element);
         xmlrpc_read_double(envP, element, &elementDouble);
+        xmlrpc_DECREF(element);
         //std::cout << elementDouble << " (";
         elementDouble = pow(elementDouble, power);
         
         element = xmlrpc_double_new(envP, elementDouble);
         xmlrpc_array_append_item(envP, returnArray, element);
+        xmlrpc_DECREF(element);
         
         //std::cout << elementDouble << "), ";
         
@@ -102,6 +109,7 @@ static xmlrpc_value * array_logn(xmlrpc_env * const envP, xmlrpc_value * const p
     xmlrpc_double base;
     xmlrpc_array_read_item(envP, paramArrayP, 0, &firstItem);
     xmlrpc_read_double(envP, firstItem, &base);
+    xmlrpc_DECREF(firstItem);
     //std::cout << base << "; Elements = [";
     
     xmlrpc_value * returnArray = xmlrpc_array_new(envP);
@@ -112,11 +120,13 @@ static xmlrpc_value * array_logn(xmlrpc_env * const envP, xmlrpc_value * const p
         xmlrpc_double elementDouble;
         xmlrpc_array_read_item(envP, paramArrayP, i, &element);
         xmlrpc_read_double(envP, element, &elementDouble);
+        xmlrpc_DECREF(element);
         //std::cout << elementDouble << " (";
         elementDouble = log(elementDouble)/log(base);
         
         element = xmlrpc_double_new(envP, elementDouble);
         xmlrpc_array_append_item(envP, returnArray, element);
+        xmlrpc_DECREF(element);
         
         //std::cout << elementDouble << "), ";
         
