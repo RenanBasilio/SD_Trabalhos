@@ -103,7 +103,7 @@ std::vector<double> type1RPCThread(int threadId)
         int startPos = threadId*blockSize + i*std::min(blockSize, MAX_RPC_SIZE_INT);
         int dataSize = std::min((threadId*blockSize)+blockSize-startPos, MAX_RPC_SIZE_INT);
         rpcClient->ExecRPC(remoteMethodName, &localResult, randomVector, startPos, dataSize);
-        std::cout << "Executed call " << i << "/" << calls << " [" << startPos << "," << dataSize << "]" << std::endl;
+        //std::cout << "Executed call " << i << "/" << calls << " [" << startPos << "," << dataSize << "]" << std::endl;
     }
     return localResult;
 }
@@ -119,7 +119,7 @@ std::vector<double> type1RPCThreadParametered(int threadId, int arg)
         int startPos = threadId*blockSize + i*std::min(blockSize, MAX_RPC_SIZE_INT);
         int dataSize = std::min((threadId*blockSize)+blockSize-startPos, MAX_RPC_SIZE_INT);
         rpcClient->ExecRPC(remoteMethodName, &localResult, randomVector, startPos, dataSize, 1, arg);
-        std::cout << "Executed call " << i << "/" << calls << " [" << startPos << "," << dataSize << "]" << std::endl;
+        //std::cout << "Executed call " << i << "/" << calls << " [" << startPos << "," << dataSize << "]" << std::endl;
     }
     return localResult;
 }
