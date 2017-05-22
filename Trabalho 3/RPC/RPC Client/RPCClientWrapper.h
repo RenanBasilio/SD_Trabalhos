@@ -85,13 +85,29 @@ public:
     template<typename T,typename U> 
     int ExecRPC(
         std::string methodName,
-        U* returnVar, std::vector<T> &args, 
+        U* returnVar, 
+        std::vector<T> &data,
         const int arrayStartPos = 0, 
-        const int arrayBlockSize = -1, 
+        const int arrayBlockSize = -1,
+        const int argCount = 0,
         ...)
     {
-        std::vector<xmlrpc_value*> rpcArgs = ConvertArray(args, arrayStartPos, arrayBlockSize);
-        xmlrpc_value* callResult = RPCall(methodName, rpcArgs);
+        
+        std::vector<xmlrpc_value*> rpcArgs = ConvertArray(data, arrayStartPos, arrayBlockSize);
+        
+        xmlrpc_value* callResult;
+        if(argCount > 0)   
+        {
+            va_list exArgs;
+            va_start(exArgs, argCount);
+            std::vector<double> args(argCount);
+            for(int i = 0; i < argCount; i++) args[i] = va_arg(exArgs, double);
+            va_end(exArgs);
+            
+            callResult = RPCall(methodName, rpcArgs, args);
+        }
+        else callResult = RPCall(methodName, rpcArgs);
+        
         for(int i = 0; i < rpcArgs.size(); i++) xmlrpc_DECREF(rpcArgs[i]);
         Parse(callResult, returnVar);
         xmlrpc_DECREF(callResult);

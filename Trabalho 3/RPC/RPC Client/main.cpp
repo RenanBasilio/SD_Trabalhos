@@ -96,7 +96,14 @@ std::vector<double> type1RPCThread(int threadId)
     int blockSize = VECTOR_SIZE/maxThreads;
     rpcClient->ExecRPC(remoteMethodName, &result, randomVector, threadId*blockSize, blockSize);
     return result;
+}
 
+std::vector<double> type1RPCThreadParametered(int threadId, int arg)
+{
+    std::vector<double> result;
+    int blockSize = VECTOR_SIZE/maxThreads;
+    rpcClient->ExecRPC(remoteMethodName, &result, randomVector, threadId*blockSize, blockSize, 1, arg);
+    return result;
 }
 
 double type2RPCThread(int threadId)
@@ -111,7 +118,7 @@ int type2RPCThreadParametered(int threadId, int arg)
 {
     double result;
     int blockSize = VECTOR_SIZE/maxThreads;
-    rpcClient->ExecRPC(remoteMethodName, &result, randomVector, threadId*blockSize, blockSize, arg);
+    rpcClient->ExecRPC(remoteMethodName, &result, randomVector, threadId*blockSize, blockSize, 1, arg);
     return (int)result;
 }
 
@@ -164,6 +171,8 @@ int main(int const argc, const char ** const argv) {
         std::cin >> userInput;
         int selection = std::stoi(userInput);
         
+        
+        
         if (selection == 0) break;
         switch(selection)
         {
@@ -205,27 +214,33 @@ int main(int const argc, const char ** const argv) {
             }
         }
         
+        std::vector<std::chrono::duration<double>> timers(RUN_COUNT);
+        
         for(int i = 0; i < RUN_COUNT; i++)
         {
+            
             randomVector.resize(VECTOR_SIZE);
             
             // Populate test vector with random numbers between 1 and 1000
-            
             for(int j = 0; j < VECTOR_SIZE; j++)
             {
                 randomVector[j] = distribution(generator);
             }
+            
+            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
             
             if(selection == 2 || selection == 3 || selection == 4)
             {   
                 // Initialize threads
                 std::vector<std::future<std::vector<double>>> threadPool(maxThreads);
                 std::vector<std::vector<double>> results(maxThreads);
+                
+                int param = distribution(generator);
     
                 // Divide vector between threads and assign rpc call operation
                 for(int k = 0; k < maxThreads; k++)
                 {
-                    threadPool[k] = std::async(&type1RPCThread, k);
+                    threadPool[k] = std::async(&type1RPCThreadParametered, k, param);
                 }
     
                 // Join threads
@@ -290,10 +305,22 @@ int main(int const argc, const char ** const argv) {
                 //std::cout << "Returned " << result << std::endl;
             }
             
+            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+            
+            timers[i] = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+            
             // Clean up for next run
             randomVector.clear();
         }    
         
+        double result;
+        for(int i = 0; i < RUN_COUNT; i++)
+        {
+            result += timers[i].count();
+        }
+        result = result/RUN_COUNT;
+        
+        std::cout << "Average execution time: " << result << std::endl;
         
     }
 
