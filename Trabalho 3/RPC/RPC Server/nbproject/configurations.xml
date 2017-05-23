@@ -40,6 +40,9 @@
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
       <compileType>
+        <cTool>
+          <standard>10</standard>
+        </cTool>
         <ccTool>
           <incDir>
             <pElem>/usr/local/include/xmlrpc-c</pElem>
@@ -50,6 +53,7 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/rpc_server</output>
           <commandlineTool>g++</commandlineTool>
           <linkerLibItems>
+            <linkerOptionItem>-static</linkerOptionItem>
             <linkerLibLibItem>xmlrpc</linkerLibLibItem>
             <linkerLibLibItem>xmlrpc_abyss</linkerLibLibItem>
             <linkerLibLibItem>xmlrpc_server</linkerLibLibItem>
@@ -80,6 +84,7 @@
       <compileType>
         <cTool>
           <developmentMode>5</developmentMode>
+          <standard>10</standard>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
@@ -97,6 +102,7 @@
         <linkerTool>
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/rpc_server</output>
           <linkerLibItems>
+            <linkerOptionItem>-static</linkerOptionItem>
             <linkerLibLibItem>xmlrpc</linkerLibLibItem>
             <linkerLibLibItem>xmlrpc_abyss</linkerLibLibItem>
             <linkerLibLibItem>xmlrpc_server</linkerLibLibItem>

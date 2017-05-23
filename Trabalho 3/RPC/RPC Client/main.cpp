@@ -149,7 +149,7 @@ double type2RPCThread(int threadId)
             //std::cout << "Executed call " << i+1 << "/" << resultSecond.size() << " [" << i*MAX_RPC_SIZE_DOUBLE << "," << MAX_RPC_SIZE_DOUBLE << "]" << std::endl;
         }
         results.clear();
-        results.resize(std::ceil(results.size()/MAX_RPC_SIZE_DOUBLE));
+        results.resize(resultSecond.size());
         for(int i = 0; i < resultSecond.size(); i++)
         {
             results[i] = resultSecond[i];
@@ -186,7 +186,7 @@ int type2RPCThreadParametered(int threadId, int arg)
             //std::cout << "Executed call " << i+1 << "/" << resultSecond.size() << " [" << i*MAX_RPC_SIZE_DOUBLE << "," << MAX_RPC_SIZE_DOUBLE << "]" << std::endl;
         }
         results.clear();
-        results.resize(std::ceil(results.size()/MAX_RPC_SIZE_DOUBLE));
+        results.resize(resultSecond.size());
         for(int i = 0; i < resultSecond.size(); i++)
         {
             results[i] = resultSecond[i];
@@ -261,37 +261,37 @@ int main(int const argc, const char ** const argv) {
             case 2:
             {
                 remoteMethodName = "array.increment";
-                std::cout << "Testing array.increment with " << maxThreads << "threads." << std::endl;
+                std::cout << "Testing array.increment with " << maxThreads << " threads." << std::endl;
                 break;
             }
             case 3:
             {
                 remoteMethodName = "array.pow";
-                std::cout << "Testing array.pow with " << maxThreads << "threads." << std::endl;
+                std::cout << "Testing array.pow with " << maxThreads << " threads." << std::endl;
                 break;
             }
             case 4:
             {
                 remoteMethodName = "array.logn";
-                std::cout << "Testing array.logn with " << maxThreads << "threads." << std::endl;
+                std::cout << "Testing array.logn with " << maxThreads << " threads." << std::endl;
                 break;
             }
             case 5:
             {
                 remoteMethodName = "array.sum";
-                std::cout << "Testing array.sum with " << maxThreads << "threads." << std::endl;
+                std::cout << "Testing array.sum with " << maxThreads << " threads." << std::endl;
                 break;
             }
             case 6:
             {
                 remoteMethodName = "array.avg";
-                std::cout << "Testing array.avg with " << maxThreads << "threads." << std::endl;
+                std::cout << "Testing array.avg with " << maxThreads << " threads." << std::endl;
                 break;
             }
             case 7:
             {
                 remoteMethodName = "array.count>";
-                std::cout << "Testing array.count> with " << maxThreads << "threads." << std::endl;
+                std::cout << "Testing array.count> with " << maxThreads << " threads." << std::endl;
                 break;
             }
         }
@@ -391,7 +391,7 @@ int main(int const argc, const char ** const argv) {
             
             timers[i] = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
             
-            std::cout << "Finished execution " << i+1 << "/" << RUN_COUNT << std::endl;
+            std::cout << "Finished execution " << i+1 << "/" << RUN_COUNT << " ( " << timers[i].count() << " s )" << std::endl;
             
             // Clean up for next run
             randomVector.clear();
@@ -404,9 +404,9 @@ int main(int const argc, const char ** const argv) {
         }
         result = result/RUN_COUNT;
         
-        std::cout << "Average execution time: " << result << std::endl;
+        std::cout << "Average execution time: " << result << " s" << std::endl;
         
-        //break;
+        break;
         
     }
     
