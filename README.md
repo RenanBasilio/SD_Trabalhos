@@ -19,3 +19,4 @@ Eduardo Araújo e Renan Basilio
 ### Trabalho 3
   * [Relatório do Trabalho 3 no Google Drive](https://drive.google.com/open?id=1-3kWx-KbYJVZNXwpJ1q9SI1l5r60-t4fpEeFqT4JvMw)
   * [Apresentação do Trabalho 3 no Google Drive](https://drive.google.com/open?id=1-AOg4JdsJ_61OPpNXo9vJaAcnScVGjpvlU9tMe3aDp0)
+  * [Spreadsheet dos Resultados e Gráficos no Google Drive](https://drive.google.com/open?id=1-XaWQZRiWX4fo44-JyzMQ_xEpuwAHVzOhOWCH8fI0UA)
