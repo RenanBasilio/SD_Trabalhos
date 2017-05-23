@@ -18,6 +18,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "math.h"
+#include <cmath>
 #include <xmlrpc-c/base.h>
 #include <xmlrpc-c/util.h>
 
@@ -87,6 +88,7 @@ static xmlrpc_value * array_pow(xmlrpc_env * const envP, xmlrpc_value * const pa
         //std::cout << elementDouble << " (";
         elementDouble = pow(elementDouble, power);
         
+        if (std::isinf(elementDouble)) elementDouble = 0.0;
         element = xmlrpc_double_new(envP, elementDouble);
         xmlrpc_array_append_item(envP, returnArray, element);
         xmlrpc_DECREF(element);

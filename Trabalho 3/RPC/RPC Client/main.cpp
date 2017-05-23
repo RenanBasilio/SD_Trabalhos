@@ -24,7 +24,7 @@
 #define VECTOR_SIZE 100000000
 #define MAX_RPC_SIZE_INT 10000
 #define MAX_RPC_SIZE_DOUBLE 5000
-#define RUN_COUNT 20
+#define RUN_COUNT 5
 
 
 std::string addrString;
@@ -113,11 +113,11 @@ std::vector<double> type1RPCThreadParametered(int threadId, int arg)
     int blockSize = VECTOR_SIZE/maxThreads;
     std::vector<double> localResult;
     
-    int calls = std::ceil((double)blockSize/MAX_RPC_SIZE_INT);
+    int calls = std::ceil((double)blockSize/MAX_RPC_SIZE_DOUBLE);
     for(int i = 0; i < calls; i++)
     {
-        int startPos = threadId*blockSize + i*std::min(blockSize, MAX_RPC_SIZE_INT);
-        int dataSize = std::min((threadId*blockSize)+blockSize-startPos, MAX_RPC_SIZE_INT);
+        int startPos = threadId*blockSize + i*std::min(blockSize, MAX_RPC_SIZE_DOUBLE);
+        int dataSize = std::min((threadId*blockSize)+blockSize-startPos, MAX_RPC_SIZE_DOUBLE);
         rpcClient->ExecRPC(remoteMethodName, &localResult, randomVector, startPos, dataSize, 1, arg);
         //std::cout << "Executed call " << i << "/" << calls << " [" << startPos << "," << dataSize << "]" << std::endl;
     }

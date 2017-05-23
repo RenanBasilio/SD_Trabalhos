@@ -53,7 +53,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-static -lxmlrpc -lxmlrpc_abyss -lxmlrpc_server -lxmlrpc_server_abyss -lxmlrpc_util
+LDLIBSOPTIONS=-lxmlrpc -lxmlrpc_abyss -lxmlrpc_server -lxmlrpc_server_abyss -lxmlrpc_util
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
